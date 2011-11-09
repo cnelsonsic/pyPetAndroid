@@ -1,0 +1,26 @@
+
+
+
+Getting Started:
+To edit and run pypetandroid, you will need python and pygame installed.
+cd into the "pet" directory and run main.py. It's not smart enough yet 
+to be run outside of that directory.
+
+Getting Started on Android:
+If you want to build for android, you'll need "Pygame Subset for Android"
+installed on your phone.
+You'll also want the latest tar.bz2 at <http://pygame.renpy.org/dl/>.
+For example: <http://pygame.renpy.org/dl/pygame-package-0.9.3.tar.bz2>
+
+You'll also need java, ant, the JDK, as well as the Android SDK.
+As per the documentation at <http://pygame.renpy.org/releasing.html>:
+"build.py expects that Python, Java, Ant, and the tools directory of
+the Android SDK are in your path. You should be able to run python,
+javac, ant, and android without having to give a path explicitly."
+
+Building for Android:
+if you run build.sh from within the project directory, it should 
+(theoretically) build the entire thing and upload it to your phone.
+It needs to be plugged in. It's not magic.
+
+

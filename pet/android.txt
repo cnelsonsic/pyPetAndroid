@@ -1,0 +1,3 @@
+title=PyAndroidPet
+author=C Nelson
+orientation=landscape
