@@ -23,12 +23,17 @@ class Pet(SpriteNode):
         # Should pre-set a sprite to use.
 
         # Which direction are we currently wandering?
-        self.wander_direction = "left" 
+        self.wander_direction = "left"
 
         # How many pixels should we move per tick.
-        # TODO: Should be a percentage of the screen.
         self.speed = 5
 
+        # FunStats(tm)
+        self.hunger = 50
+        self.social = 50
+        self.bladder = 50
+        self.hygiene = 50
+        self.energy = 50
 
         # Set up the height/width globals for this module.
         _info = pygame.display.Info()
@@ -44,6 +49,7 @@ class Pet(SpriteNode):
     def update(self):
         # Stuff that needs to happen before drawing
         self.think()
+        self.tick_stats()
         self.sprite.update()
         super(Pet, self).update()
 
@@ -65,24 +71,58 @@ class Pet(SpriteNode):
 
         # 1 in (FPS*4) chance to change direction
         if random.randint(1, FPS*5) == 1:
-            self.wander_direction = random.choice(("left", "right"))
+            self.wander_direction = random.choice(("left", "right", "up", "down"))
             print self.wander_direction
 
         #If heading right and x is less than 1/4 of screen width, keep heading right.
         # And vice versa.
 
-        dirmods = {"left": -1, "right": +1}
-        for direction, mod in dirmods.iteritems():
-            if direction == self.wander_direction:
-                self.sprite.rect.x = self.sprite.rect.x+(mod*self.speed)
+        direct = self.wander_direction
+        print direct
+        modx, mody = 0, 0
+        if direct == "left":
+            modx = -1
+        elif direct == "right":
+            modx = +1
+        elif direct == "up":
+            mody = -1
+        elif direct == "down":
+            mody = +1
         
-        # Hard limit on left and right boundaries.
+        print modx, mody 
+
+        self.sprite.rect.x += (modx*self.speed)
+        self.sprite.rect.y += (mody*self.speed)
+        
+        print self.sprite.rect.x, self.sprite.rect.y
+        print self.sprite.rect.left, self.sprite.rect.right, self.sprite.rect.top, self.sprite.rect.bottom
+        print WIDTH, HEIGHT
+
+        # Hard limit on boundaries.
         if self.sprite.rect.left <= 0:
             self.sprite.rect.left = 0
             self.wander_direction = "right"
+
+        if self.sprite.rect.top <= 0:
+            self.sprite.rect.top = 0
+            self.wander_direction = "down"
 
         if self.sprite.rect.right >= WIDTH:
             self.sprite.rect.right = WIDTH
             self.wander_direction = "left"
 
+        if self.sprite.rect.bottom >= HEIGHT:
+            self.sprite.rect.bottom = HEIGHT
+            self.wander_direction = "up"
+
+        print self.sprite.rect.left, self.sprite.rect.right, self.sprite.rect.top, self.sprite.rect.bottom
+        print
         # TODO: Update active sprite depending on which direction we're facing.
+
+    def tick_stats(self):
+        '''This ticks down the SuperFunTimeStats.'''
+        stats = (self.hunger, self.social, self.bladder, self.hygiene, self.energy)
+        for s in stats:
+            s -= 1
+
+        print "Happiness: %d" % (sum(stats)/len(stats))
